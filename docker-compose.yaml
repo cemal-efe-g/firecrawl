@@ -46,6 +46,21 @@ x-common-env: &common-env
   SEARXNG_CATEGORIES: ${SEARXNG_CATEGORIES}
 
 services:
+  firecrawl-mcp:
+    image: mcp/firecrawl
+    environment:
+      # Required if using Firecrawl Cloud:
+      # If you self-host Firecrawl Core, point to it (optional):
+      - FIRECRAWL_API_URL=firecrawl-api:3002
+      # Switch MCP transport to HTTP/SSE:
+      - SSE_LOCAL=true
+      - HOST=0.0.0.0
+    ports:
+      - "3000:3000"     # public:container
+    restart: unless-stopped
+    networks:
+      - backend
+
   playwright-service:
     # NOTE: If you don't want to build the service locally,
     # uncomment the build: statement and comment out the image: statement
